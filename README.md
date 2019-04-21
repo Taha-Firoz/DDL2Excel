@@ -35,40 +35,32 @@ If the code runs successfully you should have an Outputfile.xlsx in your directo
 If you wish to change the colour of the filled blocks you can change the values of ```table_heading``` and ```table_columns```
 
 ```
-Give an example
+table_heading = PatternFill(start_color='FF6AA84F',
+                        end_color='FF6AA84F',
+                        fill_type='solid')
 ```
-
-## Deployment
-
-Add additional notes about how to deploy this on a live system
+Add the hexcode of the colour you wish to choose into the ```start_color``` and ```end_color``` parameters.
+The first two letters as is and append your 6 digit hexcode to them e.g. Dark Green  has a  hex code "6AA84F"
+so we'll set the start_color to 
+```
+start_color = 'FF' + '6AA84F',
+end_color = 'FF' + '6AA84F'
+```
 
 ## Built With
 
-* [Dropwizard](http://www.dropwizard.io/1.0.2/docs/) - The web framework used
-* [Maven](https://maven.apache.org/) - Dependency Management
-* [ROME](https://rometools.github.io/rome/) - Used to generate RSS Feeds
+* [Python3](https://www.python.org/) - The Language Used
+* [OpenPyxl](https://openpyxl.readthedocs.io/en/stable/) - The Library Used
 
-## Contributing
-
-Please read [CONTRIBUTING.md](https://gist.github.com/PurpleBooth/b24679402957c63ec426) for details on our code of conduct, and the process for submitting pull requests to us.
-
-## Versioning
-
-We use [SemVer](http://semver.org/) for versioning. For the versions available, see the [tags on this repository](https://github.com/your/project/tags). 
 
 ## Authors
 
-* **Billie Thompson** - *Initial work* - [PurpleBooth](https://github.com/PurpleBooth)
+* **Mohammad Taha Bin Firoz** - [Taha-Firoz](https://github.com/Taha-Firoz)
+* **Mohammad Ziad Siddiqui** - [ZiadCoolio](https://github.com/ziadcoolio)
 
 See also the list of [contributors](https://github.com/your/project/contributors) who participated in this project.
 
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details
-
-## Acknowledgments
-
-* Hat tip to anyone whose code was used
-* Inspiration
-* etc
+This project is licensed under the GPL V3 License - see the [LICENSE.md](LICENSE.md) file for details
 
