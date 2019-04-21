@@ -1,0 +1,163 @@
+DDL
+
+create table Department(
+    DeptID char(2) not null,
+    Title varchar2(35) not null,
+    constraint dept_pk primary key(DeptID)
+);
+
+create table Employee(
+       EmpID numeric(3) not null,
+       Ename varchar2(15) not null,
+       Address varchar2(50),
+       Phone#  char(11),
+       CNIC char(14) not null,
+       DOB date,
+       Email varchar2(30),
+       DeptID char(2),
+    constraint emp_pk primary key(EmpID),
+    constraint chk_emid check (EmpID>0),
+    constraint emp_fk foreign key(DeptID) references Department(DeptID)
+);
+
+create table Student(
+    SID varchar2(8)  not null,
+    Sname varchar2(15) not null,
+    Address varchar2(50),
+    Phone# char(11),
+    CNIC char(14) not null,
+    Email varchar2(30),
+    DOB date,
+    constraint student_pk primary key(SID)
+);
+
+create table Semester(
+    SemID char(6) not null,
+    Start_Date date not null,
+    End_Date date not null,
+    Count_Reg int,
+    constraint chk_count check (Count_Reg>=0),
+    constraint sem_pk primary key(SemID)
+);
+
+create table Course(
+    CourseID char(5)  not null,
+    name varchar2(10) not null,
+    cr_hrs numeric(1) not null,
+    DeptID char(2),
+    Title varchar2(6),
+    Type varchar2(8),
+    constraint chk_type check (Type in(‘Core’,’Elective’)),
+    constraint chk_cr check (cr_hrs>0 and cr_hrs<5),
+    constraint cr_pk primary key(CourseID),
+    constraint cr_fk foreign key(DeptID) references Department(DeptID)
+);
+
+create table Prerequisite(
+    CourseID char(5) not null,
+    PreReqID char(5),
+    Constraint pre_pk primary key(CourseID),
+    Constraint pre_fk foreign key(PreReqID) references Course(CourseID)
+);
+
+create table OfferedCourses(
+    SemID char(6) not null,
+    CourseID char(5) not null,
+    SupervisorID numeric(3) not null,
+    constraint croff_fk_a foreign key(SemID) references Semester(SemID),
+    constraint croff_fk_b foreign key(CourseID) references Course(CourseID),
+    constraint croff_fk_c foreign key(SupervisorID) references Employee(EmpID),
+    constraint croff_pk primary key (SemID, CourseID),
+    constraint chk_supid check (SupervisorID>=0)
+);
+
+Create table EvaluationType(
+    EvalID char(2) not null,
+    Name varchar2(30) not null,
+    constraint eval_pk primary key(EvalID)
+);
+
+Create table Registrations(
+    SemID char(6) not null,
+    CouseID char(5) not null,
+    Sec char(1) not null,
+    StudentID char(6) not null,
+    Status varchar2(5) not null,
+    Grade char(2),
+    Abs float(2,2),
+    constraint chk_status check (status in(‘TRUE’,’FALSE’)),
+    constraint reg_fk_a foreign key(SemID,CourseID,Sec) references     CourseSections(SemID, CourseID, Sec),
+    constraint reg_fk_b foreign key(StudentID) references Student(SID),
+    constraint reg_pk primary key(SemID, CourseID, StudentID)
+);
+create table CourseSections(
+    SemID char(5) not null,
+    CourseID char(5) not null,
+    Sec char(1) not null,
+    Max_Count int,
+    Status varchar2(6) not null,
+    EmpID numeric(3),
+    constraint chk_status check (status in(‘Full’,’NotFull’)),
+    constraint chk_count check (Max_Count>=0),
+    constraint chk_emid check (EmpID>0),
+    constraint crsec_pk primary key(SemID, CourseID, Sec),
+    constraint crsec_fk_a foreign key(SemID, CourseID) references     OfferedCourses(SemID,CourseID),
+    Constraint crsec_fk_b foreign key(EmpID) references Employee(EmpID)
+);
+
+create table GradingScheme(
+    SemID char(6) not null ,
+    CourseID char(5) not null ,
+    EvalID char(2) not null,
+    Weightage numeric(2),
+    constraint grsch_fk foreign key (SemID,CourseID) references     OfferedCourses(SemID,CourseID),
+    Constraint chk_wght check (Weightage>0),
+    constraint grsch_pk primary key(SemID, CourseID, EvalID),
+    constraint grsch_fk_a foreign key(EvalID) references EvaluationType(EvalID)
+);
+
+Create table CourseEval(
+    SemID char(6) not null,
+    CourseID char(5) not null,
+    Sec char(1) not null,
+    EvalID char(2) not null,
+    Eval# int,
+    Date date,
+    TotalMarks int,
+    Min int,
+    Max int,
+    SD float(2,2),
+    constraint creval_fk_a foreign key( SemID, CourseID,Sec) references     CourseSections( SemID, CourseID,Sec),
+    constraint chk_min check (min>=0 and min<max),
+    constraint chk_max check (max>=0 and max>min),
+    constraint chk_TM check (TotalMarks>0),
+    constraint creval_pk primary key( SemID, CourseID,Sec, EvalID,Eval#),
+    constraint creval_fk_b foreign key(EvalID) reference EvaluationType(EvalID)
+);
+
+
+
+
+
+For auto increment (eval#):
+Create sequence seq_eval
+Minvalue 1
+Start with 1
+Increment by 1
+Cache 10;
+
+
+Create table StudentEval(
+    SemID char(6) not null,
+    CourseID char(5) not null,
+    StudentID varchar2(8) not null,
+    EvalID char(2) not null,
+    Eval# int,
+    Sec char(1) not null,
+    TotalMarks int,
+    constraint steval_fk_a foreign key(SemID, CourseID, Sec, EvalID, Eval#) references     CourseEval(SemID, CourseID, Sec, EvalID, Eval#),
+    constraint chk_TM_a check (TotalMarks>0),
+    constraint steval_pk primary key(SemID, CourseID, StudentID, EvalID,Eval#,Sec),
+    constraint steval_fk_c foreign key(SemID, CourseID, Sec, StudentID) references     Registrations(SemID,CourseID, Sec, StudentID),
+    constraint steval_fk_b foreign key(EvalID) reference EvaluationType(EvalID)
+);
