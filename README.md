@@ -55,8 +55,8 @@ end_color = 'FF' + '6AA84F'
 
 ## Authors
 
-* **Mohammad Taha Bin Firoz** - [Taha-Firoz](https://github.com/Taha-Firoz)
-* **Mohammad Ziad Siddiqui** - [ZiadCoolio](https://github.com/ziadcoolio)
+* **Mohammad Taha Bin Firoz** - [Taha Firoz](https://github.com/Taha-Firoz)
+* **Mohammad Ziad Siddiqui** - [Ziad Coolio](https://github.com/ziadcoolio)
 
 See also the list of [contributors](https://github.com/your/project/contributors) who participated in this project.
 
