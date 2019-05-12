@@ -17,7 +17,6 @@ pip install openpyxl --user
 ### Installing
 
 To start of copy your ddl commands into a textfile.
-Then run the commans
 
 ```
 python3 DDL2Excel [Filename.txt] [Outputfile.xlsx]
