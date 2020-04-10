@@ -19,7 +19,7 @@ if not config.is_file():
 	exit()
 	
 wb = Workbook()
-ws = wb.get_active_sheet()
+ws = wb.active
 current_row = 0
 current_col = 1
 
